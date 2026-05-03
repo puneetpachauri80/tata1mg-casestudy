@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Broken Flywheel — Tata 1mg Case Study</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  /* Light editorial palette */
+  --bg: #f8f6f1;
+  --bg-warm: #f2efe8;
+  --bg-card: #ffffff;
+  --bg-elevated: #faf9f6;
+  --text: #1a1a2e;
+  --text-secondary: #4a4a5a;
+  --text-muted: #7c7c8a;
+  --text-dim: #a8a8b3;
+  --accent: #b8860b;
+  --accent-deep: #8b6508;
+  --accent-light: #f5eedc;
+  --accent-green: #0d7a4f;
+  --accent-green-light: #e8f5ef;
+  --accent-red: #c0392b;
+  --accent-red-light: #fdecea;
+  --accent-blue: #2563eb;
+  --accent-blue-light: #eff4ff;
+  --accent-warm: #c2590a;
+  --accent-warm-light: #fef3eb;
+  --border: #e5e2db;
+  --border-light: #eceae4;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.03);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.04);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.08);
+  --serif: 'Instrument Serif', Georgia, serif;
+  --sans: 'DM Sans', -apple-system, sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+
+  /* 1mg app colors */
+  --app-teal: #0f847e;
+  --app-teal-dark: #0a6b66;
+  --app-teal-light: #e6f5f4;
+  --app-bg: #f5f5f5;
+  --app-white: #ffffff;
+  --app-text: #1a1a2e;
+  --app-text-secondary: #6b7280;
+  --app-text-muted: #9ca3af;
+  --app-border: #e5e7eb;
+  --app-orange: #f97316;
+  --app-red: #ef4444;
+  --app-green: #10b981;
+  --app-gold: #f59e0b;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+::selection { background: var(--accent); color: white; }
+
+.container { max-width: 860px; margin: 0 auto; padding: 0 24px; }
+.wide { max-width: 1100px; }
+section { padding: 100px 0; }
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  padding: 80px 0;
+  background: linear-gradient(180deg, #f2efe8 0%, var(--bg) 100%);
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 50% 40% at 20% 50%, rgba(184,134,11,0.05) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 40% at 80% 30%, rgba(15,132,126,0.03) 0%, transparent 60%);
+  pointer-events: none;
+}
+.hero-tag {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 32px;
+  opacity: 0;
+  animation: fadeUp 0.8s 0.2s forwards;
+}
+.hero-tag span { color: var(--text-dim); margin: 0 12px; }
+.hero-title {
+  font-family: var(--serif);
+  font-size: clamp(48px, 8vw, 96px);
+  line-height: 1.05;
+  font-weight: 400;
+  color: var(--text);
+  margin-bottom: 40px;
+  opacity: 0;
+  animation: fadeUp 0.8s 0.4s forwards;
+}
+.hero-title em { font-style: italic; color: var(--accent-deep); }
+.hero-desc {
+  font-size: 18px;
+  color: var(--text-secondary);
+  max-width: 640px;
+  line-height: 1.8;
+  margin-bottom: 56px;
+  opacity: 0;
+  animation: fadeUp 0.8s 0.6s forwards;
+}
+.hero-meta {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+  max-width: 640px;
+  box-shadow: var(--shadow-sm);
+  opacity: 0;
+  animation: fadeUp 0.8s 0.8s forwards;
+}
+.hero-meta-item { background: var(--bg-card); padding: 20px 24px; }
+.hero-meta-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 6px;
+}
+.hero-meta-value { font-size: 14px; color: var(--text); font-weight: 500; }
+
+/* ── SECTION HEADERS ── */
+.section-tag {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 16px;
+}
+.section-title {
+  font-family: var(--serif);
+  font-size: clamp(32px, 5vw, 52px);
+  line-height: 1.15;
+  font-weight: 400;
+  color: var(--text);
+  margin-bottom: 24px;
+}
+.section-title em { font-style: italic; color: var(--accent-deep); }
+.section-lead {
+  font-size: 17px;
+  color: var(--text-secondary);
+  max-width: 620px;
+  line-height: 1.8;
+}
+
+/* ── PROBLEM JOURNEY ── */
+.journey-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 28px;
+  margin-top: 48px;
+}
+.journey-step { position: relative; }
+.journey-step-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.journey-step-num {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 500;
+  flex-shrink: 0;
+}
+.journey-step-num.friction { background: var(--accent-red-light); color: var(--accent-red); }
+.journey-step-num.dark { background: var(--accent-warm-light); color: var(--accent-warm); }
+.journey-step-title { font-size: 14px; font-weight: 500; color: var(--text); }
+.journey-step-badge {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 3px;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+.journey-step-badge.friction { background: var(--accent-red-light); color: var(--accent-red); }
+.journey-step-badge.dark { background: var(--accent-warm-light); color: var(--accent-warm); }
+
+/* ── PHONE FRAME ── */
+.phone {
+  background: var(--app-white);
+  border-radius: 28px;
+  overflow: hidden;
+  box-shadow: var(--shadow-lg), 0 0 0 1px var(--border);
+  position: relative;
+}
+.phone-status {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 24px 4px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--app-text);
+  background: var(--app-white);
+}
+.phone-body {
+  background: var(--app-bg);
+  min-height: 320px;
+  padding: 0;
+  font-family: -apple-system, 'Helvetica Neue', sans-serif;
+}
+.app-header {
+  background: var(--app-white);
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid var(--app-border);
+}
+.app-header .back-arrow { font-size: 18px; color: var(--app-text); }
+.app-header .title { font-size: 16px; font-weight: 600; color: var(--app-text); }
+.app-header .subtitle { font-size: 12px; color: var(--app-text-secondary); }
+.app-card {
+  background: var(--app-white);
+  border-radius: 12px;
+  margin: 8px 12px;
+  padding: 14px 16px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+.app-btn {
+  display: block; width: 100%; padding: 12px;
+  border: none; border-radius: 8px;
+  font-family: -apple-system, sans-serif;
+  font-size: 14px; font-weight: 600; text-align: center; cursor: default;
+}
+.app-btn-teal { background: var(--app-teal); color: white; }
+.app-btn-outline { background: transparent; border: 1.5px solid var(--app-teal); color: var(--app-teal); }
+.app-btn-orange { background: var(--app-orange); color: white; }
+.app-btn-green { background: var(--app-green); color: white; }
+.app-btn-ghost { background: transparent; color: var(--app-teal); font-weight: 500; padding: 8px; }
+.app-pill {
+  display: inline-block; font-size: 10px; font-weight: 600;
+  letter-spacing: 0.3px; padding: 3px 8px; border-radius: 4px;
+}
+.app-pill-teal { background: var(--app-teal-light); color: var(--app-teal); }
+.app-pill-green { background: #ecfdf5; color: var(--app-green); }
+.app-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 10px 0; font-size: 13px; color: var(--app-text);
+}
+.app-row + .app-row { border-top: 1px solid var(--app-border); }
+.app-row .label { color: var(--app-text-secondary); }
+.app-row .value { font-weight: 600; }
+
+.app-modal-overlay {
+  background: rgba(0,0,0,0.4);
+  padding: 40px 12px 0;
+  display: flex; align-items: flex-end;
+}
+.app-modal, .app-bottom-sheet {
+  background: var(--app-white);
+  border-radius: 16px 16px 0 0;
+  padding: 20px 16px 16px;
+  width: 100%;
+}
+.app-bottom-sheet .handle {
+  width: 36px; height: 4px; background: #d1d5db;
+  border-radius: 2px; margin: 0 auto 14px;
+}
+
+.problem-highlight {
+  position: relative;
+  outline: 2px solid var(--app-red);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+.app-toggle-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 12px 16px; background: var(--app-white);
+}
+.app-toggle {
+  width: 40px; height: 22px; background: #d1d5db;
+  border-radius: 11px; position: relative;
+}
+.app-toggle::after {
+  content: ''; width: 18px; height: 18px; background: white;
+  border-radius: 50%; position: absolute; top: 2px; left: 2px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+}
+.app-coupon {
+  border: 1.5px dashed #d1d5db; border-radius: 8px;
+  padding: 12px 14px; display: flex; align-items: center; gap: 10px; opacity: 0.6;
+}
+.app-coupon .text { font-size: 12px; color: var(--app-text-secondary); }
+.app-coupon .amount { font-size: 13px; font-weight: 700; color: var(--app-text-muted); text-decoration: line-through; }
+
+.journey-desc {
+  font-size: 14px; color: var(--text-muted); margin-top: 14px; line-height: 1.6;
+}
+
+/* ── CARDS ── */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+  margin-top: 48px;
+}
+.info-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 28px 24px;
+  box-shadow: var(--shadow-sm);
+}
+.info-card-tag {
+  font-family: var(--mono);
+  font-size: 10px; letter-spacing: 1.5px;
+  text-transform: uppercase; color: var(--accent);
+  margin-bottom: 12px;
+}
+.info-card-title {
+  font-family: var(--serif);
+  font-size: 22px; margin-bottom: 16px;
+  color: var(--text); font-weight: 400;
+}
+.info-card-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.7; }
+
+/* ── FAILURES ── */
+.failure-grid { display: grid; gap: 20px; margin-top: 48px; }
+.failure-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 36px 32px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+.failure-card::before {
+  content: ''; position: absolute;
+  top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(to right, var(--accent-red), transparent);
+}
+.failure-number {
+  font-family: var(--mono); font-size: 11px;
+  color: var(--accent-red); letter-spacing: 2px;
+  text-transform: uppercase; margin-bottom: 12px;
+}
+.failure-title {
+  font-family: var(--serif); font-size: 24px;
+  margin-bottom: 16px; color: var(--text);
+}
+.failure-desc { font-size: 15px; color: var(--text-secondary); line-height: 1.8; }
+
+/* ── FLYWHEEL ── */
+.flywheel-container { margin-top: 56px; display: flex; justify-content: center; }
+.flywheel-svg { max-width: 520px; width: 100%; }
+.flywheel-steps { display: grid; gap: 32px; margin-top: 56px; }
+.flywheel-step {
+  display: grid; grid-template-columns: 56px 1fr;
+  gap: 20px; align-items: start;
+}
+.step-icon {
+  width: 56px; height: 56px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px; border: 1px solid var(--border);
+  background: var(--bg-card); box-shadow: var(--shadow-sm);
+}
+.step-content h4 {
+  font-family: var(--serif); font-size: 22px;
+  margin-bottom: 8px; color: var(--text); font-weight: 400;
+}
+.step-content p { font-size: 15px; color: var(--text-secondary); line-height: 1.8; }
+
+/* ── SOLUTION MOCKUPS ── */
+.mockup-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 32px; margin-top: 48px;
+}
+.mockup-wrapper { text-align: center; }
+.mockup-label {
+  margin-top: 16px; font-family: var(--mono);
+  font-size: 11px; color: var(--text-dim); letter-spacing: 1px;
+}
+.mockup-label-num {
+  display: inline-block; background: var(--bg-warm);
+  border: 1px solid var(--border); width: 22px; height: 22px;
+  border-radius: 50%; line-height: 20px; text-align: center;
+  font-size: 10px; color: var(--text-muted); margin-right: 6px;
+}
+.app-insight-card {
+  background: var(--app-teal-light);
+  border: 1.5px dashed var(--app-teal);
+  border-radius: 12px; padding: 14px 16px; margin: 8px 12px;
+}
+.app-result-bar {
+  height: 6px; border-radius: 3px; background: #e5e7eb;
+  margin-top: 6px; overflow: hidden;
+}
+.app-result-bar .fill { height: 100%; border-radius: 3px; }
+.app-interpretation {
+  background: #ecfdf5; border-left: 3px solid var(--app-green);
+  border-radius: 0 10px 10px 0; padding: 12px 14px; margin: 8px 12px;
+  font-size: 12px; color: #065f46; line-height: 1.6;
+}
+.app-care-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 16px; background: var(--app-white);
+  margin: 4px 12px; border-radius: 8px;
+  font-size: 13px; color: var(--app-text);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+}
+.app-care-item .icon {
+  width: 32px; height: 32px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; flex-shrink: 0;
+}
+.app-care-item .icon-green { background: #ecfdf5; }
+.app-care-item .icon-blue { background: #eff6ff; }
+.app-care-item .icon-amber { background: #fffbeb; }
+.app-care-item .check { margin-left: auto; color: var(--app-green); font-weight: 700; font-size: 14px; }
+
+/* ── METRICS ── */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1px; background: var(--border);
+  border: 1px solid var(--border); border-radius: 10px;
+  overflow: hidden; margin-top: 48px;
+  box-shadow: var(--shadow-sm);
+}
+.metric-card { background: var(--bg-card); padding: 28px 24px; }
+.metric-label {
+  font-family: var(--mono); font-size: 10px;
+  letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--text-dim); margin-bottom: 10px;
+}
+.metric-value {
+  font-family: var(--serif); font-size: 36px;
+  color: var(--text); margin-bottom: 6px;
+}
+.metric-value.accent { color: var(--accent); }
+.metric-value.green { color: var(--accent-green); }
+.metric-desc { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
+
+/* ── BLOCKQUOTE ── */
+.insight-quote {
+  border-left: 3px solid var(--accent);
+  padding: 24px 32px;
+  margin: 48px 0;
+  background: var(--accent-light);
+  border-radius: 0 10px 10px 0;
+}
+.insight-quote p {
+  font-family: var(--serif); font-size: 20px;
+  line-height: 1.6; color: var(--text); font-style: italic;
+}
+
+/* ── ROADMAP ── */
+.roadmap { margin-top: 48px; }
+.roadmap-item {
+  display: grid; grid-template-columns: 100px 1fr;
+  gap: 24px; padding: 24px 0;
+  border-bottom: 1px solid var(--border); align-items: start;
+}
+.roadmap-item:last-child { border: none; }
+.roadmap-week {
+  font-family: var(--mono); font-size: 12px;
+  color: var(--text-dim); padding-top: 4px;
+}
+.roadmap-content h4 { font-size: 15px; color: var(--text); font-weight: 500; margin-bottom: 4px; }
+.roadmap-content p { font-size: 14px; color: var(--text-secondary); }
+.roadmap-badge {
+  display: inline-block; font-family: var(--mono);
+  font-size: 10px; letter-spacing: 1px;
+  padding: 3px 8px; border-radius: 3px;
+  margin-left: 8px; vertical-align: middle;
+}
+.roadmap-badge.design { background: var(--accent-light); color: var(--accent); }
+.roadmap-badge.eng { background: var(--accent-blue-light); color: var(--accent-blue); }
+.roadmap-badge.qa { background: var(--accent-warm-light); color: var(--accent-warm); }
+.roadmap-badge.ab { background: var(--accent-green-light); color: var(--accent-green); }
+
+/* ── SECTION DIVIDER ── */
+section + section { border-top: 1px solid var(--border-light); }
+
+/* ── FOOTER ── */
+.footer {
+  padding: 60px 0; text-align: center;
+  border-top: 1px solid var(--border);
+  background: var(--bg-warm);
+}
+.footer p {
+  font-family: var(--mono); font-size: 12px;
+  color: var(--text-dim); letter-spacing: 1px;
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.reveal {
+  opacity: 0; transform: translateY(24px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 640px) {
+  section { padding: 64px 0; }
+  .hero { min-height: auto; padding: 120px 0 64px; }
+  .hero-meta { grid-template-columns: 1fr 1fr; }
+  .journey-grid { grid-template-columns: 1fr; }
+  .mockup-grid { grid-template-columns: 1fr; max-width: 340px; margin-left: auto; margin-right: auto; }
+  .metrics-grid { grid-template-columns: 1fr 1fr; }
+  .roadmap-item { grid-template-columns: 80px 1fr; gap: 16px; }
+  .flywheel-step { grid-template-columns: 1fr; gap: 12px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<header class="hero">
+  <div class="container">
+    <div class="hero-tag">Product Case Study <span>·</span> 2026 <span>·</span> Health-tech</div>
+    <h1 class="hero-title">The <em>Broken Flywheel</em></h1>
+    <p class="hero-desc">
+      A product deep-dive into why India's only pharmacy-diagnostics-consultation
+      platform treats verified returning patients as strangers — and the health
+      flywheel that could turn a ₹175 Metformin order into lifelong care.
+    </p>
+    <div class="hero-meta">
+      <div class="hero-meta-item">
+        <div class="hero-meta-label">Domain</div>
+        <div class="hero-meta-value">Health-tech</div>
+      </div>
+      <div class="hero-meta-item">
+        <div class="hero-meta-label">Product</div>
+        <div class="hero-meta-value">Tata 1mg</div>
+      </div>
+      <div class="hero-meta-item">
+        <div class="hero-meta-label">Surface</div>
+        <div class="hero-meta-value">Mobile checkout</div>
+      </div>
+      <div class="hero-meta-item">
+        <div class="hero-meta-label">Est. Impact</div>
+        <div class="hero-meta-value">₹112cr/qtr revenue</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════════ 01 THE PROBLEM ═══════════════ -->
+<section>
+  <div class="container wide">
+    <div class="section-tag reveal">01 — The Problem</div>
+    <h2 class="section-title reveal">Seventy-five seconds of <em>quiet friction.</em></h2>
+    <p class="section-lead reveal">
+      Meet Sunita — a composite user modelled on real ordering patterns from
+      tier-2 UP. She's 52, diabetic, and orders ₹175 of Metformin every month.
+      She's done this for 8 months. A loyal, verified customer. Here's what
+      her cart screen actually looks like.
+    </p>
+
+    <div class="journey-grid">
+
+      <!-- Step 1 -->
+      <div class="journey-step reveal">
+        <div class="journey-step-header">
+          <div class="journey-step-num friction">1</div>
+          <div class="journey-step-title">Split cart bottom sheet</div>
+          <div class="journey-step-badge friction">Friction</div>
+        </div>
+        <div class="phone">
+          <div class="phone-status"><span>9:41</span><span>●●● ▮▮▮</span></div>
+          <div class="phone-body">
+            <div class="app-header">
+              <span class="back-arrow">‹</span>
+              <div><div class="title">Cart</div><div class="subtitle">1 item · ₹175</div></div>
+            </div>
+            <div class="app-card" style="opacity:0.4;margin-top:8px;">
+              <div style="display:flex;gap:10px;align-items:center;">
+                <div style="width:44px;height:44px;background:#f3f4f6;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;">💊</div>
+                <div>
+                  <div style="font-size:13px;font-weight:600;color:var(--app-text);">Metformin 500mg</div>
+                  <div style="font-size:11px;color:var(--app-text-secondary);">30 tablets · ₹175</div>
+                </div>
+              </div>
+            </div>
+            <div class="app-modal-overlay" style="min-height:180px;">
+              <div class="app-bottom-sheet problem-highlight">
+                <div class="handle"></div>
+                <div style="font-size:14px;font-weight:700;color:var(--app-text);margin-bottom:12px;">Continue to purchase from:</div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                  <div class="app-btn app-btn-teal" style="font-size:13px;">🏥 Pharmacy</div>
+                  <div class="app-btn app-btn-outline" style="font-size:13px;">🔬 Lab Tests</div>
+                </div>
+                <div style="font-size:10px;color:var(--app-text-muted);text-align:center;margin-top:8px;">She has only pharmacy items in cart</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="journey-desc">One medicine in cart. The app still forces a choice between pharmacy and lab tests — a decision that shouldn't exist here.</p>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="journey-step reveal">
+        <div class="journey-step-header">
+          <div class="journey-step-num dark">2</div>
+          <div class="journey-step-title">Care Plan blocks the cart</div>
+          <div class="journey-step-badge dark">Dark pattern</div>
+        </div>
+        <div class="phone">
+          <div class="phone-status"><span>9:41</span><span>●●● ▮▮▮</span></div>
+          <div class="phone-body">
+            <div class="app-header" style="opacity:0.3;">
+              <span class="back-arrow">‹</span>
+              <div><div class="title">Cart</div></div>
+            </div>
+            <div class="app-modal-overlay" style="min-height:290px;">
+              <div class="app-bottom-sheet problem-highlight" style="padding-top:20px;">
+                <div style="text-align:center;margin-bottom:12px;"><span style="font-size:28px;">👑</span></div>
+                <div style="font-size:16px;font-weight:700;color:var(--app-text);text-align:center;">Get Tata 1mg Care Plan</div>
+                <div style="font-size:12px;color:var(--app-text-secondary);text-align:center;margin-bottom:14px;">Save more on every order</div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
+                  <div style="background:var(--app-teal-light);border:2px solid var(--app-teal);border-radius:10px;padding:10px;text-align:center;">
+                    <div style="font-size:10px;color:var(--app-teal);font-weight:700;">POPULAR</div>
+                    <div style="font-size:18px;font-weight:800;color:var(--app-text);">₹549</div>
+                    <div style="font-size:10px;color:var(--app-text-secondary);">12 months</div>
+                  </div>
+                  <div style="background:#f9fafb;border:1.5px solid var(--app-border);border-radius:10px;padding:10px;text-align:center;">
+                    <div style="font-size:10px;color:var(--app-text-muted);">BASIC</div>
+                    <div style="font-size:18px;font-weight:800;color:var(--app-text);">₹149</div>
+                    <div style="font-size:10px;color:var(--app-text-secondary);">3 months</div>
+                  </div>
+                </div>
+                <div class="app-btn app-btn-teal" style="margin-bottom:8px;">Buy Care Plan</div>
+                <div class="app-btn app-btn-ghost" style="font-size:12px;color:var(--app-text-muted);">Skip for now</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="journey-desc">Full-screen modal. Pre-selects the ₹549 option. "Skip" is de-emphasised grey text. She just wants to check out a ₹175 order.</p>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="journey-step reveal">
+        <div class="journey-step-header">
+          <div class="journey-step-num friction">3</div>
+          <div class="journey-step-title">"Save ₹0" generic alternatives</div>
+          <div class="journey-step-badge friction">Friction</div>
+        </div>
+        <div class="phone">
+          <div class="phone-status"><span>9:42</span><span>●●● ▮▮▮</span></div>
+          <div class="phone-body">
+            <div class="app-header">
+              <span class="back-arrow">‹</span>
+              <div><div class="title">Cart</div><div class="subtitle">1 item · ₹175</div></div>
+            </div>
+            <div class="app-card" style="margin-top:8px;">
+              <div style="display:flex;gap:10px;align-items:center;margin-bottom:12px;">
+                <div style="width:44px;height:44px;background:#f3f4f6;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;">💊</div>
+                <div>
+                  <div style="font-size:13px;font-weight:600;color:var(--app-text);">Metformin 500mg</div>
+                  <div style="font-size:11px;color:var(--app-text-secondary);">Glycomet · 30 tablets</div>
+                </div>
+                <div style="margin-left:auto;font-size:15px;font-weight:700;color:var(--app-text);">₹175</div>
+              </div>
+              <div class="problem-highlight" style="border-radius:8px;">
+                <div class="app-toggle-row" style="border-radius:8px;background:#f9fafb;">
+                  <div>
+                    <div style="font-size:13px;color:var(--app-text);font-weight:500;">Switch to generic</div>
+                    <div style="font-size:11px;color:var(--app-text-muted);font-weight:500;">Save ₹0</div>
+                  </div>
+                  <div class="app-toggle"></div>
+                </div>
+              </div>
+            </div>
+            <div style="padding:0 12px;margin-top:4px;">
+              <div class="app-coupon">
+                <span style="font-size:16px;">🔒</span>
+                <div>
+                  <div class="text">Add ₹625 more to unlock</div>
+                  <div class="amount">₹100 OFF on ₹800+</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="journey-desc">A toggle promising savings — delivering nothing. Below it, a coupon locked at ₹800 she'll never reach on a ₹175 monthly order.</p>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="journey-step reveal">
+        <div class="journey-step-header">
+          <div class="journey-step-num dark">4</div>
+          <div class="journey-step-title">Surprise charge + second upsell</div>
+          <div class="journey-step-badge dark">Trust erosion</div>
+        </div>
+        <div class="phone">
+          <div class="phone-status"><span>9:42</span><span>●●● ▮▮▮</span></div>
+          <div class="phone-body">
+            <div class="app-header">
+              <span class="back-arrow">‹</span>
+              <div><div class="title">Bill Summary</div></div>
+            </div>
+            <div class="app-card" style="margin-top:8px;">
+              <div class="app-row"><span class="label">Item total</span><span class="value">₹175</span></div>
+              <div class="app-row"><span class="label">Delivery</span><span class="value" style="color:var(--app-green);">FREE</span></div>
+              <div class="app-row problem-highlight" style="border-radius:4px;padding:10px 4px;">
+                <span class="label">Handling charge</span>
+                <span class="value" style="color:var(--app-red);">₹12</span>
+              </div>
+              <div class="app-row" style="font-weight:700;">
+                <span class="label" style="color:var(--app-text);font-weight:700;">Total</span>
+                <span class="value">₹187</span>
+              </div>
+            </div>
+            <div class="app-card problem-highlight" style="border:1.5px solid var(--app-orange);">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+                <span style="font-size:16px;">👑</span>
+                <div style="font-size:12px;font-weight:700;color:var(--app-orange);">Save ₹12 with Care Plan</div>
+              </div>
+              <div style="font-size:11px;color:var(--app-text-secondary);margin-bottom:8px;">Get free delivery + handling fee waiver</div>
+              <div class="app-btn app-btn-orange" style="font-size:12px;padding:8px;">Add Care Plan · ₹149</div>
+            </div>
+            <div style="padding:8px 12px;"><div class="app-btn app-btn-teal">Place Order · ₹187</div></div>
+          </div>
+        </div>
+        <p class="journey-desc">₹12 handling charge appears for the first time here. And the same Care Plan she already dismissed? Pushed again in the bill summary.</p>
+      </div>
+
+    </div>
+
+    <div class="insight-quote reveal" style="margin-top:56px;">
+      <p>Six friction events. Seventy-five seconds. A ₹175 medicine order for a
+        chronic disease. That checkout flow contains the entire story of why this
+        product is so close to great — and why it's not there yet.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 02 WHAT'S STRONG ═══════════════ -->
+<section>
+  <div class="container">
+    <div class="section-tag reveal">02 — What's Strong</div>
+    <h2 class="section-title reveal">Three moats <em>no one</em> can copy.</h2>
+    <div class="card-grid reveal">
+      <div class="info-card">
+        <div class="info-card-tag">Moat 01</div>
+        <div class="info-card-title">The Tata Brand</div>
+        <p class="info-card-desc">150 years of Indian family trust applied to the highest-stakes consumer category. When a 68-year-old retired teacher sees "Tata 1mg," he's willing to try digital health. That brand equity cannot be bought or replicated.</p>
+      </div>
+      <div class="info-card">
+        <div class="info-card-tag">Moat 02</div>
+        <div class="info-card-title">The Triangle</div>
+        <p class="info-card-desc">Pharmacy + diagnostics + teleconsultation in one platform. No competitor combines all three. Apollo 247, Dr. Lal PathLabs, Practo — each owns one vertex. 1mg owns all three. The flywheel exists in strategy, not yet in product.</p>
+      </div>
+      <div class="info-card">
+        <div class="info-card-tag">Moat 03</div>
+        <div class="info-card-title">500M Page Views</div>
+        <p class="info-card-desc">More Indians search for health information on 1mg than any competitor. 500 million monthly page views from organic health content — built through years of genuine investment, not ad spend.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 03 WHAT'S BROKEN ═══════════════ -->
+<section>
+  <div class="container">
+    <div class="section-tag reveal">03 — What's Broken</div>
+    <h2 class="section-title reveal">Three failures, <em>one root cause.</em></h2>
+    <p class="section-lead reveal">
+      I walked through the complete purchase journey end-to-end — from home screen
+      to order confirmation — for a chronic medicine user. Three interconnected
+      failures emerged.
+    </p>
+    <div class="failure-grid">
+      <div class="failure-card reveal">
+        <div class="failure-number">Failure 01</div>
+        <h3 class="failure-title">Verified patients treated as strangers</h3>
+        <p class="failure-desc">Sunita has ordered the same Metformin for 8 months. The app knows her. Yet she re-selects her prescription from the vault every month. She scrolls past 25 home screen sections to find Previously Ordered Items. She receives no refill reminder at day 25. The platform has 8 months of her health data and uses none of it.</p>
+      </div>
+      <div class="failure-card reveal">
+        <div class="failure-number">Failure 02</div>
+        <h3 class="failure-title">The flywheel doesn't exist in the product</h3>
+        <p class="failure-desc">Sunita has been on Metformin for 8 months and 1mg has never suggested she check her HbA1c (recommended quarterly for diabetics). When she does book a test and receives her result — 7.8% — the report is a PDF with numbers and reference ranges. No plain-language interpretation. The pharmacy knows she's diabetic. The diagnostics team doesn't. They share a user, an app, and a brand — they share no health intelligence.</p>
+      </div>
+      <div class="failure-card reveal">
+        <div class="failure-number">Failure 03</div>
+        <h3 class="failure-title">Monetisation is adversarial</h3>
+        <p class="failure-desc">The Care Plan modal blocks the cart. The handling charge appears at the last step. Paid placements mix with editorial without disclosure. The locked coupon shows discounts the user can never reach. On a health platform — where trust is the primary value proposition — adversarial monetisation is self-defeating.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 04 THE SOLUTION ═══════════════ -->
+<section>
+  <div class="container">
+    <div class="section-tag reveal">04 — The Recommended Design</div>
+    <h2 class="section-title reveal">The health <em>flywheel.</em></h2>
+    <p class="section-lead reveal">
+      The single highest-leverage product investment: connecting pharmacy,
+      diagnostics, and consultation into a continuous loop where every step
+      drives engagement in the next vertical, generates revenue, and improves
+      health outcomes.
+    </p>
+    <div class="flywheel-container reveal">
+      <svg class="flywheel-svg" viewBox="0 0 520 520" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="arrow" viewBox="0 0 10 6" refX="8" refY="3" markerWidth="10" markerHeight="6" orient="auto-start-reverse">
+            <path d="M0,0 L10,3 L0,6 z" fill="#8b6508" opacity="0.6"/>
+          </marker>
+        </defs>
+        <circle cx="260" cy="260" r="200" fill="none" stroke="#e5e2db" stroke-width="1"/>
+        <circle cx="260" cy="260" r="120" fill="none" stroke="#e5e2db" stroke-width="1" stroke-dasharray="4 4"/>
+        <path d="M 260 60 A 200 200 0 0 1 433 160" fill="none" stroke="#b8860b" stroke-width="1.5" marker-end="url(#arrow)" opacity="0.5"/>
+        <path d="M 450 200 A 200 200 0 0 1 400 420" fill="none" stroke="#b8860b" stroke-width="1.5" marker-end="url(#arrow)" opacity="0.5"/>
+        <path d="M 370 440 A 200 200 0 0 1 150 440" fill="none" stroke="#b8860b" stroke-width="1.5" marker-end="url(#arrow)" opacity="0.5"/>
+        <path d="M 120 420 A 200 200 0 0 1 70 200" fill="none" stroke="#b8860b" stroke-width="1.5" marker-end="url(#arrow)" opacity="0.5"/>
+        <g><circle cx="260" cy="60" r="32" fill="white" stroke="#b8860b" stroke-width="1.5"/><text x="260" y="55" text-anchor="middle" font-size="18" fill="#b8860b">💊</text><text x="260" y="72" text-anchor="middle" font-family="'JetBrains Mono'" font-size="8" fill="#7c7c8a" letter-spacing="1">MEDICINE</text></g>
+        <g><circle cx="455" cy="200" r="32" fill="white" stroke="#0d7a4f" stroke-width="1.5"/><text x="455" y="195" text-anchor="middle" font-size="18" fill="#0d7a4f">🔬</text><text x="455" y="212" text-anchor="middle" font-family="'JetBrains Mono'" font-size="8" fill="#7c7c8a" letter-spacing="1">TEST</text></g>
+        <g><circle cx="400" cy="420" r="32" fill="white" stroke="#2563eb" stroke-width="1.5"/><text x="400" y="415" text-anchor="middle" font-size="18" fill="#2563eb">📊</text><text x="400" y="432" text-anchor="middle" font-family="'JetBrains Mono'" font-size="8" fill="#7c7c8a" letter-spacing="1">INSIGHT</text></g>
+        <g><circle cx="120" cy="420" r="32" fill="white" stroke="#c2590a" stroke-width="1.5"/><text x="120" y="415" text-anchor="middle" font-size="18" fill="#c2590a">👨‍⚕️</text><text x="120" y="432" text-anchor="middle" font-family="'JetBrains Mono'" font-size="8" fill="#7c7c8a" letter-spacing="1">DOCTOR</text></g>
+        <g><circle cx="65" cy="200" r="32" fill="white" stroke="#c0392b" stroke-width="1.5"/><text x="65" y="195" text-anchor="middle" font-size="18" fill="#c0392b">🔄</text><text x="65" y="212" text-anchor="middle" font-family="'JetBrains Mono'" font-size="8" fill="#7c7c8a" letter-spacing="1">RENEW</text></g>
+        <text x="260" y="254" text-anchor="middle" font-family="'Instrument Serif', Georgia" font-size="18" fill="#1a1a2e" font-style="italic">Better</text>
+        <text x="260" y="276" text-anchor="middle" font-family="'Instrument Serif', Georgia" font-size="18" fill="#8b6508" font-style="italic">Health</text>
+      </svg>
+    </div>
+    <div class="flywheel-steps">
+      <div class="flywheel-step reveal">
+        <div class="step-icon">💊</div>
+        <div class="step-content">
+          <h4>Step 1 — Medicine-to-Test Intelligence</h4>
+          <p>A clinical rules engine maps every chronic medicine to its recommended monitoring tests. Metformin → HbA1c quarterly, kidney function annually. When Sunita orders Metformin and her last HbA1c was 4 months ago: "Your HbA1c is overdue — book now from ₹299, home collection tomorrow." One prompt. No nagging. Clinically appropriate.</p>
+        </div>
+      </div>
+      <div class="flywheel-step reveal">
+        <div class="step-icon">📊</div>
+        <div class="step-content">
+          <h4>Step 2 — Test-to-Insight Intelligence</h4>
+          <p>When Sunita receives her HbA1c result — 7.8% — the app shows plain-language interpretation: "Your HbA1c is above target but improved from 8.4%. Your management is working. Continue Metformin. Retest in 3 months." The test result becomes an action plan — not a PDF dump.</p>
+        </div>
+      </div>
+      <div class="flywheel-step reveal">
+        <div class="step-icon">👨‍⚕️</div>
+        <div class="step-content">
+          <h4>Step 3 — Consultation Continuity</h4>
+          <p>When Sunita books a teleconsultation, the doctor sees her medicine history, lab results, and previous notes before calling. After the call: "Dr. Sharma's care plan: continue Metformin, retest HbA1c in 3 months, walk 20 minutes after dinner." Every recommendation is an actionable platform interaction.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 05 PROTOTYPE ═══════════════ -->
+<section>
+  <div class="container wide">
+    <div class="section-tag reveal">05 — Prototype</div>
+    <h2 class="section-title reveal">What the redesigned <em>experience</em> looks like.</h2>
+    <p class="section-lead reveal">
+      Three screens showing the flywheel in action: a proactive test prompt on
+      her order confirmation, an intelligent result interpretation, and a
+      connected doctor consultation.
+    </p>
+    <div class="mockup-grid">
+      <!-- Screen 1 -->
+      <div class="mockup-wrapper reveal">
+        <div class="phone">
+          <div class="phone-status"><span>9:47</span><span>●●● ▮▮▮</span></div>
+          <div class="phone-body" style="padding-bottom:16px;">
+            <div class="app-header" style="background:var(--app-teal);border:none;">
+              <span class="back-arrow" style="color:white;">‹</span>
+              <div><div class="title" style="color:white;">Order Confirmed</div></div>
+            </div>
+            <div class="app-card" style="text-align:center;margin-top:12px;padding:20px 16px;">
+              <div style="width:48px;height:48px;background:#ecfdf5;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:22px;">✓</div>
+              <div style="font-size:16px;font-weight:700;color:var(--app-text);margin-bottom:2px;">Order Placed!</div>
+              <div style="font-size:12px;color:var(--app-text-secondary);">Metformin 500mg × 30 · ₹175</div>
+              <div style="font-size:11px;color:var(--app-text-muted);margin-top:4px;">Arriving tomorrow by 6 PM</div>
+            </div>
+            <div class="app-insight-card">
+              <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px;">
+                <span class="app-pill app-pill-teal">Health Insight</span>
+              </div>
+              <div style="font-size:14px;font-weight:600;color:var(--app-text);margin-bottom:4px;">Your HbA1c test is overdue</div>
+              <div style="font-size:12px;color:var(--app-text-secondary);margin-bottom:14px;line-height:1.5;">
+                Recommended quarterly with Metformin.<br>Last test: 4 months ago.
+              </div>
+              <div style="background:white;border-radius:8px;padding:10px 12px;display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                <div>
+                  <div style="font-size:13px;font-weight:600;color:var(--app-text);">HbA1c Test</div>
+                  <div style="font-size:11px;color:var(--app-text-secondary);">Home collection · Tomorrow 8 AM</div>
+                </div>
+                <div style="font-size:15px;font-weight:700;color:var(--app-teal);">₹299</div>
+              </div>
+              <div class="app-btn app-btn-teal">Book Test</div>
+            </div>
+          </div>
+        </div>
+        <div class="mockup-label"><span class="mockup-label-num">1</span> Medicine → Test prompt</div>
+      </div>
+
+      <!-- Screen 2 -->
+      <div class="mockup-wrapper reveal">
+        <div class="phone">
+          <div class="phone-status"><span>10:32</span><span>●●● ▮▮▮</span></div>
+          <div class="phone-body" style="padding-bottom:16px;">
+            <div class="app-header">
+              <span class="back-arrow">‹</span>
+              <div><div class="title">Test Results</div><div class="subtitle">HbA1c · May 2026</div></div>
+            </div>
+            <div class="app-card" style="margin-top:8px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+                <div>
+                  <span class="app-pill app-pill-green">Results Ready</span>
+                  <div style="font-size:14px;font-weight:700;color:var(--app-text);margin-top:8px;">HbA1c — Glycated Hemoglobin</div>
+                </div>
+              </div>
+              <div class="app-row">
+                <span class="label">Your result</span>
+                <span class="value" style="color:var(--app-orange);font-size:20px;">7.8%</span>
+              </div>
+              <div class="app-result-bar"><div class="fill" style="width:65%;background:linear-gradient(to right, var(--app-green), var(--app-orange));"></div></div>
+              <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--app-text-muted);margin-top:4px;">
+                <span>4.0% Normal</span><span>6.5% Target</span><span>10%+</span>
+              </div>
+              <div class="app-row" style="margin-top:8px;">
+                <span class="label">Previous (Jan 2026)</span><span class="value">8.4%</span>
+              </div>
+              <div class="app-row">
+                <span class="label">Change</span>
+                <span class="value" style="color:var(--app-green);">↓ 0.6% improved</span>
+              </div>
+            </div>
+            <div class="app-interpretation">
+              <strong>What this means:</strong> Your HbA1c is above target but <strong>improved from 8.4%</strong>. Your current management is working. Continue Metformin. Retest in 3 months.
+            </div>
+            <div style="padding:4px 12px;">
+              <div class="app-btn app-btn-teal" style="margin-bottom:6px;">Talk to a Doctor — Free with Care Plan</div>
+              <div class="app-btn app-btn-outline">Remind me · Retest Aug 2026</div>
+            </div>
+          </div>
+        </div>
+        <div class="mockup-label"><span class="mockup-label-num">2</span> Test → Insight interpretation</div>
+      </div>
+
+      <!-- Screen 3 -->
+      <div class="mockup-wrapper reveal">
+        <div class="phone">
+          <div class="phone-status"><span>11:15</span><span>●●● ▮▮▮</span></div>
+          <div class="phone-body" style="padding-bottom:16px;">
+            <div class="app-header" style="background:var(--app-teal);border:none;">
+              <span class="back-arrow" style="color:white;">‹</span>
+              <div><div class="title" style="color:white;">Care Plan</div><div class="subtitle" style="color:rgba(255,255,255,0.7);">Dr. Sharma · May 3, 2026</div></div>
+            </div>
+            <div class="app-card" style="margin-top:12px;">
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+                <div style="width:40px;height:40px;background:var(--app-teal-light);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;">👨‍⚕️</div>
+                <div>
+                  <div style="font-size:14px;font-weight:600;color:var(--app-text);">Dr. Priya Sharma</div>
+                  <div style="font-size:11px;color:var(--app-text-secondary);">General Medicine · 12 min consultation</div>
+                </div>
+              </div>
+              <div style="font-size:12px;color:var(--app-text-secondary);line-height:1.6;padding:10px 12px;background:#f9fafb;border-radius:8px;font-style:italic;">
+                "Your HbA1c improved to 7.8% — let's keep your current regimen. Kidney function is mildly reduced — we'll monitor."
+              </div>
+            </div>
+            <div style="padding:4px 0 0;font-size:11px;font-weight:600;color:var(--app-text-muted);padding-left:16px;letter-spacing:0.5px;text-transform:uppercase;margin-top:4px;">Your action items</div>
+            <div class="app-care-item">
+              <div class="icon icon-green">💊</div>
+              <div><div style="font-weight:600;font-size:13px;">Continue Metformin 500mg</div><div style="font-size:11px;color:var(--app-text-secondary);">Auto-reorder on · Next: May 28</div></div>
+              <span class="check">✓</span>
+            </div>
+            <div class="app-care-item">
+              <div class="icon icon-blue">📅</div>
+              <div><div style="font-weight:600;font-size:13px;">Retest HbA1c</div><div style="font-size:11px;color:var(--app-text-secondary);">Aug 2026 · Reminder set</div></div>
+              <span class="check">✓</span>
+            </div>
+            <div class="app-care-item">
+              <div class="icon icon-amber">🚶</div>
+              <div><div style="font-weight:600;font-size:13px;">Walk 20 min after dinner</div><div style="font-size:11px;color:var(--app-text-secondary);">Read guide →</div></div>
+            </div>
+            <div class="app-card" style="text-align:center;padding:16px;margin-top:4px;">
+              <div style="font-size:11px;color:var(--app-text-muted);font-weight:500;letter-spacing:0.3px;text-transform:uppercase;margin-bottom:4px;">Next touchpoint</div>
+              <div style="font-size:14px;font-weight:600;color:var(--app-text);">Metformin refill reminder</div>
+              <div style="font-size:12px;color:var(--app-text-secondary);">in 25 days via WhatsApp</div>
+            </div>
+          </div>
+        </div>
+        <div class="mockup-label"><span class="mockup-label-num">3</span> Doctor → Connected care plan</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 06 METRICS ═══════════════ -->
+<section>
+  <div class="container">
+    <div class="section-tag reveal">06 — Success Metrics</div>
+    <h2 class="section-title reveal">What we'd <em>measure.</em></h2>
+    <p class="section-lead reveal">
+      The north star: cross-vertical user rate — the percentage of pharmacy
+      users who also book at least one lab test per quarter.
+    </p>
+    <div class="metrics-grid reveal">
+      <div class="metric-card">
+        <div class="metric-label">North Star</div>
+        <div class="metric-value accent">25%</div>
+        <div class="metric-desc">Cross-vertical user rate target (from ~5–8% baseline)</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Impact Estimation</div>
+        <div class="metric-value green">₹112cr</div>
+        <div class="metric-desc">Incremental diagnostics revenue per quarter</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Teleconsult Rate</div>
+        <div class="metric-value">15%+</div>
+        <div class="metric-desc">Booking rate from abnormal test interpretations</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">HbA1c Adherence</div>
+        <div class="metric-value green">60%</div>
+        <div class="metric-desc">Quarterly monitoring target (vs ~25% current)</div>
+      </div>
+    </div>
+    <div class="insight-quote reveal" style="margin-top:48px;">
+      <p>15M chronic medicine users × 25% cross-vertical × ₹299 average test
+        = ₹112 crore per quarter in incremental diagnostics revenue at
+        near-zero acquisition cost.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 07 WHY THIS BET ═══════════════ -->
+<section>
+  <div class="container">
+    <div class="section-tag reveal">07 — Why This Solution</div>
+    <h2 class="section-title reveal">Why <em>this bet</em> over everything else.</h2>
+    <div class="card-grid reveal">
+      <div class="info-card">
+        <div class="info-card-tag">Reason 01</div>
+        <div class="info-card-title">It Serves Health</div>
+        <p class="info-card-desc">A diabetic who never misses an HbA1c test because 1mg reminds her proactively is a patient whose diabetes is better managed. Her HbA1c improves. Her complications reduce. The primary purpose is health outcomes.</p>
+      </div>
+      <div class="info-card">
+        <div class="info-card-tag">Reason 02</div>
+        <div class="info-card-title">It Compounds Revenue</div>
+        <p class="info-card-desc">Every pharmacy order creates a diagnostics opportunity (₹299). Every result creates a consultation. Every consultation creates a prescription renewal. Revenue per user doesn't grow 1× — it grows 3×.</p>
+      </div>
+      <div class="info-card">
+        <div class="info-card-tag">Reason 03</div>
+        <div class="info-card-title">It Creates Lock-In</div>
+        <p class="info-card-desc">A user with 3 years of HbA1c trends, whose monitoring schedule is managed by the platform, whose doctor has her complete history — switching means starting from zero. The deepest retention is genuine health value.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 08 ROLLOUT ═══════════════ -->
+<section>
+  <div class="container">
+    <div class="section-tag reveal">08 — Rollout</div>
+    <h2 class="section-title reveal">Eighteen months to <em>health companion.</em></h2>
+    <div class="roadmap reveal">
+      <div class="roadmap-item"><div class="roadmap-week">M 1–2</div><div class="roadmap-content"><h4>Clinical rules engine <span class="roadmap-badge design">Design</span></h4><p>Map top 50 chronic medicines to recommended monitoring tests. Medical advisory review. Data model for patient health timeline.</p></div></div>
+      <div class="roadmap-item"><div class="roadmap-week">M 3–5</div><div class="roadmap-content"><h4>Medicine-to-test integration <span class="roadmap-badge eng">Engineering</span></h4><p>Prompting engine on order confirmation. WhatsApp refill reminders. Smart home screen for returning patients.</p></div></div>
+      <div class="roadmap-item"><div class="roadmap-week">M 6–8</div><div class="roadmap-content"><h4>Intelligent result interpretation <span class="roadmap-badge eng">Engineering</span></h4><p>Plain-language test results with historical trends. Teleconsultation CTA on abnormal results. Calendar integration for retest reminders.</p></div></div>
+      <div class="roadmap-item"><div class="roadmap-week">M 9–10</div><div class="roadmap-content"><h4>5% experiment — 2 cities <span class="roadmap-badge ab">A/B Test</span></h4><p>One tier-1 + one tier-2 city. Matched control group. Measure cross-vertical rate, retention, and health adherence metrics.</p></div></div>
+      <div class="roadmap-item"><div class="roadmap-week">M 11–14</div><div class="roadmap-content"><h4>Consultation continuity <span class="roadmap-badge eng">Engineering</span></h4><p>Doctor sees full patient history pre-call. Post-consultation care plans with actionable 1mg links. Family health dashboard.</p></div></div>
+      <div class="roadmap-item"><div class="roadmap-week">M 15–18</div><div class="roadmap-content"><h4>National scale <span class="roadmap-badge qa">Scale</span></h4><p>25% → national rollout if guardrails hold. Checkout de-friction. Adversarial monetisation cleanup. Health companion identity.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 09 CLOSING ═══════════════ -->
+<section>
+  <div class="container">
+    <div class="section-tag reveal">09 — The Big Picture</div>
+    <h2 class="section-title reveal">From marketplace to <em>health companion.</em></h2>
+    <p class="section-lead reveal" style="max-width:680px;">
+      The marketplace version of 1mg is 25 sections of products on a home screen.
+      The companion version knows your name, your condition, your medicines, your
+      test schedule, your family's health — and greets you Monday morning with:
+    </p>
+    <div class="insight-quote reveal" style="margin-top:32px;">
+      <p>"Your Metformin is due Thursday. Your HbA1c test is in 2 weeks. Your mother's
+        prescription expires April 30. Here's your family health plan for the week."</p>
+    </div>
+    <p class="section-lead reveal" style="margin-top:24px;max-width:680px;">
+      That product is buildable — not in 5 years, but in 18 months — with focused
+      investment in the flywheel, the intelligence layer, and the family health
+      management that makes every interaction genuinely about the user's health
+      rather than about completing a transaction.
+    </p>
+    <p class="section-lead reveal" style="margin-top:16px;max-width:680px;color:var(--accent-deep);">
+      1mg isn't a broken product. It's an incomplete one — and the distance between
+      what it is and what it could be is exactly the kind of gap that makes product
+      work worth doing.
+    </p>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container"><p>The Broken Flywheel · Product Case Study · 2026</p></div>
+</footer>
+
+<script>
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
